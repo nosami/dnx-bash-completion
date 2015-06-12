@@ -1,0 +1,112 @@
+_dnvm()
+{
+    shopt -s nullglob
+    local cur prev opts commands
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    command="${COMP_WORDS[1]}"
+    prevprev="${COMP_WORDS[COMP_CWORD-2]}"
+    semvers=$(for dir in $HOME/.dnx/runtimes/*; do dirname=${dir##*/}; echo ${dirname#*.}; done)
+    aliases=$(for alias_file in $HOME/.dnx/alias/*; do file_name=${alias_file##*/}; echo ${file_name%.alias}; done)
+    upgrade="-f forces -u unstable -r -runtime"
+
+    dnvm_commands="upgrade install use exec list alias unalias -h help -help --help update-self"
+
+    if [ ${prev} == dnvm ] ; then
+        COMPREPLY=( $(compgen -W "$opts $dnvm_commands" -- ${cur}) )
+        return 0
+    elif [ ${prev} == use ] ; then
+        COMPREPLY=( $(compgen -W "$semvers $aliases" -- ${cur}) )
+        return 0
+    elif [ ${prev} == run ] ; then
+        COMPREPLY=( $(compgen -W "$semvers $aliases" -- ${cur}) )
+        return 0
+    elif [ ${prev} == exec ] ; then
+        COMPREPLY=( $(compgen -W "$semvers $aliases" -- ${cur}) )
+        return 0
+    elif [ ${prev} == upgrade ] ; then
+        COMPREPLY=( $(compgen -W "$upgrade" -- ${cur}) )
+        return 0
+    elif [ ${prev} == -r ] || [ ${prev} == -runtime ]; then
+        COMPREPLY=( $(compgen -W "mono coreclr" -- ${cur}) )
+        return 0
+    elif [ ${command} == install ] && [ ${COMP_CWORD} == 2 ]; then
+        COMPREPLY=( $(compgen -W "$semvers $aliases latest *.nupkg" -- ${cur}) )
+        return 0
+    elif [ ${command} == install ] && [ ${COMP_CWORD} -gt 2 ]; then
+        COMPREPLY=( $(compgen -W "-a -alias -p -persistent -f -force -u -unstable -r -runtime" -- ${cur}) )
+        return 0
+    elif [ ${command} == alias ] && [ ${COMP_CWORD} == 3 ]; then
+        COMPREPLY=( $(compgen -W "$semvers $aliases *.nupkg" -- ${cur}) )
+        return 0
+    elif [ ${command} == unalias ]; then
+        COMPREPLY=( $(compgen -W "$aliases" -- ${cur}) )
+        return 0
+    fi
+}
+complete -F _dnvm dnvm
+
+#USAGE: dnvm <command> [options]
+#
+#dnvm upgrade [-f|-force] [-u|-unstable]
+#  install latest DNX from feed
+#  adds DNX bin to path of current command line
+#  set installed version as default
+#  -f|forces         force upgrade. Overwrite existing version of DNX if already installed
+#  -u|unstable       use unstable feed. Installs the DNX from the unstable unstable feed
+#  -r|runtime        The runtime flavor to install [clr or coreclr] (default: clr)
+#
+#dnvm install <semver>|<alias>|<nupkg>|latest [-a|-alias <alias>] [-p|-persistent] [-f|-force] [-u|-unstable]
+#  <semver>|<alias>  install requested DNX from feed
+#  <nupkg>           install requested DNX from local package on filesystem
+#  latest            install latest version of DNX from feed
+#  -a|-alias <alias> set alias <alias> for requested DNX on install
+#  -p|-persistent    set installed version as default
+#  -f|force          force install. Overwrite existing version of DNX if already installed
+#  -u|unstable       use unstable feed. Installs the DNX from the unstable unstable feed
+#  -r|runtime        The runtime flavor to install [mono or coreclr] (default: mono)
+#
+#  adds DNX bin to path of current command line
+#
+#dnvm use <semver>|<alias>|<package>|none [-p|-persistent] [-r|-runtime <runtime>] [-a|-arch <architecture>]
+#  <semver>|<alias>|<package>  add DNX bin to path of current command line
+#  none                        remove DNX bin from path of current command line
+#  -p|-persistent              set selected version as default
+#  -r|-runtime                 runtime to use (mono, coreclr)
+#  -a|-arch                    architecture to use (x64)
+#
+#dnvm run <semver>|<alias> <args...>
+#  <semver>|<alias>            the version or alias to run
+#  <args...>                   arguments to be passed to DNX
+#
+#  runs the DNX command from the specified version of the runtime without affecting the current PATH
+#
+#dnvm exec <semver>|<alias> <command> <args...>
+#  <semver>|<alias>            the version or alias to execute in
+#  <command>                   the command to run
+#  <args...>                   arguments to be passed to the command
+#
+#  runs the specified command in the context of the specified version of the runtime without affecting the current PATH
+#  example: dnvm exec 1.0.0-beta4 dnu build
+#
+#dnvm list
+#  list DNX versions installed
+#
+#dnvm alias
+#  list DNX aliases which have been defined
+#
+#dnvm alias <alias>
+#  display value of the specified alias
+#
+#dnvm alias <alias> <semver>|<alias>|<package>
+#  <alias>                      the name of the alias to set
+#  <semver>|<alias>|<package>   the DNX version to set the alias to. Alternatively use the version of the specified alias
+#
+#dnvm unalias <alias>
+#  remove the specified alias
+#
+#dnvm [help|-h|-help|--help]
+#  displays this help text.
+#
+#dnvm update-self
