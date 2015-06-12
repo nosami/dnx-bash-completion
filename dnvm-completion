@@ -1,47 +1,48 @@
 _dnvm_completions()
 {
     shopt -s nullglob
-    local cur prev opts command semvers aliases upgrade
+    local cur prev dnvm_command semvers aliases upgrade dnvm_commands
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     if [ $COMP_CWORD -gt 0 ]; then
-      command="${COMP_WORDS[1]}"
+      dnvm_command="${COMP_WORDS[1]}"
     fi
     semvers=$(for dir in $HOME/.dnx/runtimes/*; do dirname=${dir##*/}; echo ${dirname#*.}; done)
     aliases=$(for alias_file in $HOME/.dnx/alias/*; do file_name=${alias_file##*/}; echo ${file_name%.alias}; done)
     upgrade="-f forces -u unstable -r -runtime"
 
+    shopt -u nullglob
     dnvm_commands="upgrade install use exec list alias unalias -h help -help --help update-self"
 
     if [ ${prev} == dnvm ] ; then
-        COMPREPLY=( $(compgen -W "$opts $dnvm_commands" -- ${cur}) )
+        COMPREPLY=( $(compgen -W "${opts} ${dnvm_commands}" -- ${cur}) )
         return 0
-    elif [ ${prev} == use ] ; then
+    elif [ ${dnvm_command} == use ] ; then
         COMPREPLY=( $(compgen -W "$semvers $aliases" -- ${cur}) )
         return 0
-    elif [ ${prev} == run ] ; then
+    elif [ ${dnvm_command} == run ] ; then
         COMPREPLY=( $(compgen -W "$semvers $aliases" -- ${cur}) )
         return 0
-    elif [ ${prev} == exec ] ; then
+    elif [ ${dnvm_command} == exec ] ; then
         COMPREPLY=( $(compgen -W "$semvers $aliases" -- ${cur}) )
         return 0
-    elif [ ${prev} == upgrade ] ; then
+    elif [ ${dnvm_command} == upgrade ] ; then
         COMPREPLY=( $(compgen -W "$upgrade" -- ${cur}) )
         return 0
-    elif [ ${prev} == -r ] || [ ${prev} == -runtime ]; then
+    elif [ ${dnvm_command} == -r ] ; then
         COMPREPLY=( $(compgen -W "mono coreclr" -- ${cur}) )
         return 0
-    elif [ ${command} == install ] && [ ${COMP_CWORD} == 2 ]; then
+    elif [ ${dnvm_command} == install ] && [ ${COMP_CWORD} == 2 ]; then
         COMPREPLY=( $(compgen -W "$semvers $aliases latest *.nupkg" -- ${cur}) )
         return 0
-    elif [ ${command} == install ] && [ ${COMP_CWORD} -gt 2 ]; then
+    elif [ ${dnvm_command} == install ] && [ ${COMP_CWORD} -gt 2 ]; then
         COMPREPLY=( $(compgen -W "-a -alias -p -persistent -f -force -u -unstable -r -runtime" -- ${cur}) )
         return 0
-    elif [ ${command} == alias ] && [ ${COMP_CWORD} == 3 ]; then
+    elif [ ${dnvm_command} == alias ] && [ ${COMP_CWORD} == 3 ]; then
         COMPREPLY=( $(compgen -W "$semvers $aliases *.nupkg" -- ${cur}) )
         return 0
-    elif [ ${command} == unalias ]; then
+    elif [ ${dnvm_command} == unalias ]; then
         COMPREPLY=( $(compgen -W "$aliases" -- ${cur}) )
         return 0
     fi
