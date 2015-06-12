@@ -1,4 +1,4 @@
-_dnvm()
+_dnvm_completions()
 {
     shopt -s nullglob
     local cur prev opts command semvers aliases upgrade
@@ -46,4 +46,4 @@ _dnvm()
         return 0
     fi
 }
-complete -F _dnvm dnvm
+complete -F _dnvm_completions dnvm
