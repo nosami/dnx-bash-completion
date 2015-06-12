@@ -34,6 +34,9 @@ _dnu()
     elif [ ${command} == pack ] ; then
         COMPREPLY=( $(compgen -W "$pack" -- ${cur}) )
         return 0
+    elif [ ${command} == packages ] ; then
+        COMPREPLY=( $(compgen -W "$packages" -- ${cur}) )
+        return 0
     elif [ ${command} == build ] ; then
         COMPREPLY=( $(compgen -W "$build" -- ${cur}) )
         return 0
