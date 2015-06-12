@@ -1,10 +1,12 @@
-_dnu() 
+_dnu()
 {
-    local cur prev opts commands
+    local cur prev opts command help dnu_commands restore publish pack build install packages list commands_opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    prevprev="${COMP_WORDS[COMP_CWORD-2]}"
+    if [ $COMP_CWORD -gt 0 ]; then
+      command="${COMP_WORDS[1]}"
+    fi
     help="-? -h --help"
     opts="$help -v -version --verbose"
     dnu_commands="restore help publish pack build install packages list commands $help"
@@ -17,31 +19,31 @@ _dnu()
     list="-a --assemblies --framework --runtime --hide-dependents --filter $help"
     commands_opts="help install uninstall $help"
 
-    if [ ${prev} == dnu ] ; then 
+    if [ ${prev} == dnu ] ; then
         COMPREPLY=( $(compgen -W "$opts $dnu_commands" -- ${cur}) )
         return 0
-    elif [[ ${prev} == help ]] ; then 
+    elif [[ ${prev} == help ]] ; then
         COMPREPLY=( $(compgen -W "$dnu_commands" -- ${cur}) )
         return 0
-    elif [ ${prev} == restore ] || [ ${prevprev} == restore ] ; then 
+    elif [ ${command} == restore ] ; then
         COMPREPLY=( $(compgen -W "$install" -- ${cur}) )
         return 0
-    elif [ ${prev} == publish ] || [ ${prevprev} == publish ] ; then 
+    elif [ ${command} == publish ] ; then
         COMPREPLY=( $(compgen -W "$publish" -- ${cur}) )
         return 0
-    elif [ ${prev} == pack ] || [ ${prevprev} == pack ] ; then 
+    elif [ ${command} == pack ] ; then
         COMPREPLY=( $(compgen -W "$pack" -- ${cur}) )
         return 0
-    elif [ ${prev} == build ] || [ ${prevprev} == build ] ; then 
+    elif [ ${command} == build ] ; then
         COMPREPLY=( $(compgen -W "$build" -- ${cur}) )
         return 0
-    elif [ ${prev} == install ] || [ ${prevprev} == install ] ; then 
+    elif [ ${command} == install ] ; then
         COMPREPLY=( $(compgen -W "$restore" -- ${cur}) )
         return 0
-    elif [ ${prev} == list ] || [ ${prevprev} == list ] ; then 
+    elif [ ${command} == list ] ; then
         COMPREPLY=( $(compgen -W "$list" -- ${cur}) )
         return 0
-    elif [ ${prev} == commands ] || [ ${prevprev} == commands ] ; then 
+    elif [ ${command} == commands ] ; then
         COMPREPLY=( $(compgen -W "$commands_opts" -- ${cur}) )
         return 0
     fi
