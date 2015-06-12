@@ -1,0 +1,49 @@
+_dnu() 
+{
+    local cur prev opts commands
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    prevprev="${COMP_WORDS[COMP_CWORD-2]}"
+    help="-? -h --help"
+    opts="$help -v -version --verbose"
+    dnu_commands="restore help publish pack build install packages list commands $help"
+    restore="-s --source -f --fallback -p --proxy --no-cache --packages --ignore-failed-sources --quiet --lock --unlock --parallel $help"
+    publish="-o --out --configuration --nosource --runtime --native --wwwroot --wwwroot-out --quiet $help"
+    pack="--framework --configuration --out --dependencies --quiet $help"
+    build="--framework --configuration --out --quiet $help"
+    install="-s --source -f --fallback -p --proxy --no-cache --packages --ignore-failed-sources --quiet $help"
+    packages="add help push pull $help"
+    list="-a --assemblies --framework --runtime --hide-dependents --filter $help"
+    commands_opts="help install uninstall $help"
+
+    if [ ${prev} == dnu ] ; then 
+        COMPREPLY=( $(compgen -W "$opts $dnu_commands" -- ${cur}) )
+        return 0
+    elif [[ ${prev} == help ]] ; then 
+        COMPREPLY=( $(compgen -W "$dnu_commands" -- ${cur}) )
+        return 0
+    elif [ ${prev} == restore ] || [ ${prevprev} == restore ] ; then 
+        COMPREPLY=( $(compgen -W "$install" -- ${cur}) )
+        return 0
+    elif [ ${prev} == publish ] || [ ${prevprev} == publish ] ; then 
+        COMPREPLY=( $(compgen -W "$publish" -- ${cur}) )
+        return 0
+    elif [ ${prev} == pack ] || [ ${prevprev} == pack ] ; then 
+        COMPREPLY=( $(compgen -W "$pack" -- ${cur}) )
+        return 0
+    elif [ ${prev} == build ] || [ ${prevprev} == build ] ; then 
+        COMPREPLY=( $(compgen -W "$build" -- ${cur}) )
+        return 0
+    elif [ ${prev} == install ] || [ ${prevprev} == install ] ; then 
+        COMPREPLY=( $(compgen -W "$restore" -- ${cur}) )
+        return 0
+    elif [ ${prev} == list ] || [ ${prevprev} == list ] ; then 
+        COMPREPLY=( $(compgen -W "$list" -- ${cur}) )
+        return 0
+    elif [ ${prev} == commands ] || [ ${prevprev} == commands ] ; then 
+        COMPREPLY=( $(compgen -W "$commands_opts" -- ${cur}) )
+        return 0
+    fi
+}
+complete -F _dnu dnu
