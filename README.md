@@ -1,4 +1,4 @@
-# BASH completion for dnx commands
+# BASH tab completion for dnx commands
 
 Provides argument completions for dnx, dnu and dnvm as well as semvers, aliases and dnx commands
 
