@@ -1,11 +1,11 @@
 _dnu()
 {
-  local cur prev opts command help dnu_commands restore publish pack build install packages list commands_opts
+    local cur prev opts command help dnu_commands restore publish pack build install packages list commands_opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     if [ $COMP_CWORD -gt 0 ]; then
-     command="${COMP_WORDS[1]}"
+        command="${COMP_WORDS[1]}"
     fi
     help="-? -h --help"
     opts="$help -v -version --verbose"

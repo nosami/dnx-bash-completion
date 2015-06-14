@@ -6,7 +6,7 @@ _dnvm_completions()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     if [ $COMP_CWORD -gt 0 ]; then
-      dnvm_command="${COMP_WORDS[1]}"
+        dnvm_command="${COMP_WORDS[1]}"
     fi
     semvers=$(for dir in $HOME/.dnx/runtimes/*; do dirname=${dir##*/}; echo ${dirname#*.}; done)
     aliases=$(for alias_file in $HOME/.dnx/alias/*; do file_name=${alias_file##*/}; echo ${file_name%.alias}; done)
