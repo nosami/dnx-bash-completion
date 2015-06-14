@@ -10,7 +10,7 @@ _dnvm_completions()
     fi
     semvers=$(for dir in $HOME/.dnx/runtimes/*; do dirname=${dir##*/}; echo ${dirname#*.}; done)
     aliases=$(for alias_file in $HOME/.dnx/alias/*; do file_name=${alias_file##*/}; echo ${file_name%.alias}; done)
-    upgrade="-f forces -u unstable -r -runtime"
+    upgrade="-f -force -u -unstable -r -runtime"
 
     shopt -u nullglob
     dnvm_commands="upgrade install use exec list alias unalias -h help -help --help update-self"
