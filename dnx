@@ -9,7 +9,7 @@ _dnx_completion()
 
     if [ -f ${prev}/project.json ] ; then
         # if there is a project.json in the folder specified by the previous argument
-        COMMANDS=$(cat $prev/project.json | python -c 'import json,sys;obj=json.load(sys.stdin);[print(key) for key in obj["commands"].keys()]')
+        COMMANDS=$(cat $prev/project.json | python -c 'import json,sys;obj=json.load(sys.stdin);print(" ".join(key for key in obj["commands"].keys()))')
         COMPREPLY=( $(compgen -W "$COMMANDS run" -- ${cur}) )
         return 0
     elif [ ${prev} == dnx ] ; then
