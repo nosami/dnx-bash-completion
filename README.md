@@ -4,15 +4,25 @@ Provides argument completions for dnx, dnu and dnvm as well as semvers, aliases 
 
 ## Prerequisites
 
+Only do this if you don't already have tab completion for other commands (such as git parameters)
+
+If tab completion is installed, skip to [Install](#Install)
 - bash-completion
 
 ##### OSX
 ```bash
 brew install bash-completion
 ```
+Paste the following into ~/.bash_profile (create the file if it doesn't already exist)
+```bash
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
+```
 
 ## Install
-
-    git clone https://github.com/nosami/dnx-bash-completion.git
-    cd dnx-bash-completion
-    ./install.sh
+```bash
+git clone https://github.com/nosami/dnx-bash-completion.git
+cd dnx-bash-completion
+./install.sh
+```
