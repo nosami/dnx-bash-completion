@@ -30,14 +30,17 @@ _dnvm_completions()
     elif [ ${dnvm_command} == upgrade ] ; then
         COMPREPLY=( $(compgen -W "$upgrade" -- ${cur}) )
         return 0
-    elif [ ${dnvm_command} == -r ] ; then
+    elif [ ${prev} == -r ] ; then
         COMPREPLY=( $(compgen -W "mono coreclr" -- ${cur}) )
         return 0
     elif [ ${dnvm_command} == install ] && [ ${COMP_CWORD} == 2 ]; then
         COMPREPLY=( $(compgen -W "$semvers $aliases latest *.nupkg" -- ${cur}) )
         return 0
+    elif [ ${dnvm_command} == install ] && [ ${prev} == -arch ]; then
+        COMPREPLY=( $(compgen -W "arm x64 x86" -- ${cur}) )
+        return 0
     elif [ ${dnvm_command} == install ] && [ ${COMP_CWORD} -gt 2 ]; then
-        COMPREPLY=( $(compgen -W "-a -alias -p -persistent -f -force -u -unstable -r -runtime" -- ${cur}) )
+        COMPREPLY=( $(compgen -W "-a -alias -p -persistent -f -force -u -unstable -r -runtime -arch" -- ${cur}) )
         return 0
     elif [ ${dnvm_command} == alias ] && [ ${COMP_CWORD} == 3 ]; then
         COMPREPLY=( $(compgen -W "$semvers $aliases *.nupkg" -- ${cur}) )
