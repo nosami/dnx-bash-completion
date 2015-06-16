@@ -6,7 +6,7 @@ Provides argument completions for dnx, dnu and dnvm as well as semvers, aliases 
 
 Only do this if you don't already have tab completion for other commands (such as git parameters)
 
-If tab completion is installed, skip to [Install](#Install)
+If tab completion is installed, skip to [Install](#install)
 - bash-completion
 
 ##### OSX
