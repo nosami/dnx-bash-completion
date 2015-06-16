@@ -6,8 +6,7 @@ Provides argument completions for dnx, dnu and dnvm as well as semvers, aliases 
 
 Only do this if you don't already have tab completion for other commands (such as git parameters)
 
-If tab completion is installed, skip to [Install](#install)
-- bash-completion
+If tab completion is installed, skip to [Install](#install-completion-for-dnx)
 
 ##### OSX
 ```bash
@@ -20,7 +19,7 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
 fi
 ```
 
-## Install
+## Install completion for DNX
 ```bash
 git clone https://github.com/nosami/dnx-bash-completion.git
 cd dnx-bash-completion
